@@ -1,5 +1,6 @@
 export namespace AppSettings {
-  export const API_BASE = 'https://api.live-loisirs.alexetmanon.fr';
+  // export const API_BASE = 'https://api.live-loisirs.alexetmanon.fr';
+  export const API_BASE = 'http://127.0.0.1:8080';
 
   export const NAVITIA = {
     API_BASE: 'https://api.navitia.io/v1',
