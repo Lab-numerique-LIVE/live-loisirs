@@ -89,8 +89,8 @@ function deploy_build {
     rm -rf ./www
     rm -rf ./node_modules
     log_info "Installs dependencies"
-    npm install
-    npm run build --prod
+    sudo -u fguerin npm install
+    sudo -u fguerin npm run build --prod
     log_info "Deploy build  ${OK}"
 }
 
