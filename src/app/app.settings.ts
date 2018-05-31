@@ -1,6 +1,11 @@
 export namespace AppSettings {
-  // export const API_BASE = 'https://api.live-loisirs.alexetmanon.fr';
-  export const API_BASE = 'http://127.0.0.1:8080';
+  const DEBUG = false;
+  let api_base = 'https://loisirs-live.tourcoing.fr';
+  if (DEBUG) {
+    api_base = 'http://127.0.0.1:8080';
+  }
+  
+  export const API_BASE = api_base;
 
   export const NAVITIA = {
     API_BASE: 'https://api.navitia.io/v1',
