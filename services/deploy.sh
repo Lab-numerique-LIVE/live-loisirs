@@ -50,9 +50,32 @@ function log_error {
 
 # PROJECT
 PWD=$(pwd)
+
+# FOLDERS
+PROJECT_ROOT="/var/www/loisirs-live.tourcoing.fr"
+WEB_USER="loisirs-live"
+WEB_GROUP="www-data"
+
+
+# BUILD
+
+# APACHE
 APACHE_CONF="loisirs-live-tourcoing-fr.conf"
 APACHE_AVAILABLE="${APACHE_AVAILABLE_PATH}/${APACHE_CONF}"
 APACHE_ENABLED="${APACHE_ENABLED_PATH}/020-${APACHE_CONF}"
+
+function deploy_folders () {
+    if [[ ! -d "${PROJECT_ROOT}/log" ]]; then
+        mkdir "${PROJECT_ROOT}/log"
+        chown -R ${WEB_USER}:${WEB_GROUP} "${PROJECT_ROOT}/log"
+        log_info "Directory *"${PROJECT_ROOT}/log"* created."
+    fi
+}
+
+
+# Builds the project
+function deploy_build () {
+}
 
 function deploy_apache() {
     cp "./apache/${APACHE_CONF}" ${APACHE_AVAILABLE}
@@ -69,7 +92,7 @@ function deploy_apache() {
 
 # Services settings
 SERVICE="_ALL_"
-AVAILABLE_SERVICES="apache"
+AVAILABLE_SERVICES="build apache"
 
 # How to use the script !
 function usage {
@@ -108,6 +131,9 @@ function main {
         case ${SERVICE} in
             "apache")
                 deploy_apache
+                ;;
+            "build")
+                deploy_build
             ;;
             *)
                 usage
