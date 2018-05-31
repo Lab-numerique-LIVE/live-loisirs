@@ -70,6 +70,7 @@ APACHE_ENABLED="${APACHE_ENABLED_PATH}/020-${APACHE_CONF}"
 # Creates the needed folders
 function deploy_folders () {
     log_info "Deploy folders"
+    cd ${CWD};
     for folder in "${NEEDED_FOLDERS}"; do
         if [[ ! -d "${WWW_PROJECT_ROOT}/${folder}" ]]; then
             mkdir "${WWW_PROJECT_ROOT}/${folder}"
@@ -91,6 +92,7 @@ function deploy_build {
 
 function deploy_apache {
     log_info "Deploy apache"
+    cd ${CWD};
     cp "./apache/${APACHE_CONF}" ${APACHE_AVAILABLE}
     ln -s "${APACHE_AVAILABLE}"  "${APACHE_ENABLED}"
     SETTINGS_OK=$(/usr/sbin/apache2ctl configtest);
