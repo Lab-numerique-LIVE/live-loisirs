@@ -125,25 +125,28 @@ function usage {
     exit 0
 }
 
+# Parses script options
+while getopts "hds:" opt; do
+    case $opt in
+        h)
+            usage
+        ;;
+        d)
+            export LOGLEVEL=3
+        ;;
+        s)
+            SERVICE=${OPTARG}
+        ;;
+        \?)
+            echo "ERROR: invalid argument !"
+            usage
+        ;;
+    esac
+done
+
 # main function
 function main {
-    while getopts "hds:" opt; do
-        case $opt in
-            h)
-                usage
-            ;;
-            d)
-                export LOGLEVEL=3
-            ;;
-            s)
-                SERVICE=${OPTARG}
-            ;;
-            \?)
-                echo "ERROR: invalid argument !"
-                usage
-            ;;
-        esac
-    done
+
 
     if [[ "${SERVICE}" = "_ALL_"  ]]; then
         deploy_folders
