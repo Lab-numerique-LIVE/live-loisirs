@@ -80,8 +80,6 @@ function deploy_folders () {
     log_info "Deploy folders ${OK}"
 }
 
-
-
 # Builds the project
 function deploy_build {
     log_info "Deploy build"
@@ -142,17 +140,19 @@ function main {
     done
 
     if [[ "${SERVICE}" = "_ALL_"  ]]; then
+        deploy_folders
+        deploy_build
         deploy_apache
     else
         case ${SERVICE} in
             "folders")
                 deploy_folders
             ;;
-            "apache")
-                deploy_apache
-            ;;
             "build")
                 deploy_build
+            ;;
+            "apache")
+                deploy_apache
             ;;
             *)
                 usage
