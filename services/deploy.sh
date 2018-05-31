@@ -54,13 +54,13 @@ function log_error {
 PWD=$(pwd)
 
 # FOLDERS
-PROJECT_ROOT="/var/www/loisirs-live.tourcoing.fr"
+WWW_PROJECT_ROOT="/var/www/loisirs-live.tourcoing.fr"
 NEEDED_FOLDERS="log"
 WEB_USER="loisirs-live"
 WEB_GROUP="www-data"
 
-
 # BUILD
+BUILD_PROJET_ROOT="/home/fguerin/production/loisirs-live.tourcoing.fr/live-loisirs"
 
 # APACHE
 APACHE_CONF="loisirs-live-tourcoing-fr.conf"
@@ -71,23 +71,27 @@ APACHE_ENABLED="${APACHE_ENABLED_PATH}/020-${APACHE_CONF}"
 function deploy_folders () {
     log_info "Deploy folders"
     for folder in "${NEEDED_FOLDERS}"; do
-        if [[ ! -d "${PROJECT_ROOT}/${folder}" ]]; then
-            mkdir "${PROJECT_ROOT}/${folder}"
-            chown -R ${WEB_USER}:${WEB_GROUP} "${PROJECT_ROOT}/${folder}"
-            log_info "Directory *"${PROJECT_ROOT}/${folder}"* created."
+        if [[ ! -d "${WWW_PROJECT_ROOT}/${folder}" ]]; then
+            mkdir "${WWW_PROJECT_ROOT}/${folder}"
+            chown -R ${WEB_USER}:${WEB_GROUP} "${WWW_PROJECT_ROOT}/${folder}"
+            log_info "Directory *"${WWW_PROJECT_ROOT}/${folder}"* created."
         fi
     done;
-
     log_info "Deploy folders ${OK}"
 }
 
+
+
 # Builds the project
-function deploy_build () {
+function deploy_build {
     log_info "Deploy build"
+    cd ${BUILD_PROJET_ROOT}
+    npm install
+    npm run build --prod
     log_info "Deploy build  ${OK}"
 }
 
-function deploy_apache() {
+function deploy_apache {
     log_info "Deploy apache"
     cp "./apache/${APACHE_CONF}" ${APACHE_AVAILABLE}
     ln -s "${APACHE_AVAILABLE}"  "${APACHE_ENABLED}"
