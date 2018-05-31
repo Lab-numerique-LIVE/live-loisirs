@@ -85,6 +85,10 @@ function deploy_folders () {
 function deploy_build {
     log_info "Deploy build"
     cd ${BUILD_PROJET_ROOT}
+    log_info "Removes the www folder"
+    rm -rf ./www
+    rm -rf ./node_modules
+    log_info "Installs dependencies"
     npm install
     npm run build --prod
     log_info "Deploy build  ${OK}"
