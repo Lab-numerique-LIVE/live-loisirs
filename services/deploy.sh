@@ -20,6 +20,7 @@ export GREEN='\033[1;32m'
 export YELLOW='\033[1;33m'
 export BLUE='\033[1;34m'
 export NC='\033[0m' # No Color
+export OK="${GREEN}[ OK ]${NC}"
 
 ########################################
 # LOGGING
@@ -28,6 +29,7 @@ export LEVEL_DEBUG=4
 export LEVEL_INFO=3
 export LEVEL_WARNING=2
 export LEVEL_ERROR=1
+
 
 
 export LOGLEVEL=${LEVEL_DEBUG}
@@ -53,6 +55,7 @@ PWD=$(pwd)
 
 # FOLDERS
 PROJECT_ROOT="/var/www/loisirs-live.tourcoing.fr"
+NEEDED_FOLDERS="log"
 WEB_USER="loisirs-live"
 WEB_GROUP="www-data"
 
@@ -64,20 +67,28 @@ APACHE_CONF="loisirs-live-tourcoing-fr.conf"
 APACHE_AVAILABLE="${APACHE_AVAILABLE_PATH}/${APACHE_CONF}"
 APACHE_ENABLED="${APACHE_ENABLED_PATH}/020-${APACHE_CONF}"
 
+# Creates the needed folders
 function deploy_folders () {
-    if [[ ! -d "${PROJECT_ROOT}/log" ]]; then
-        mkdir "${PROJECT_ROOT}/log"
-        chown -R ${WEB_USER}:${WEB_GROUP} "${PROJECT_ROOT}/log"
-        log_info "Directory *"${PROJECT_ROOT}/log"* created."
-    fi
-}
+    log_info "Deploy folders"
+    for folder in "${NEEDED_FOLDERS}"; do
+        if [[ ! -d "${PROJECT_ROOT}/${folder}" ]]; then
+            mkdir "${PROJECT_ROOT}/${folder}"
+            chown -R ${WEB_USER}:${WEB_GROUP} "${PROJECT_ROOT}/${folder}"
+            log_info "Directory *"${PROJECT_ROOT}/${folder}"* created."
+        fi
+    done;
 
+    log_info "Deploy folders ${OK}"
+}
 
 # Builds the project
 function deploy_build () {
+    log_info "Deploy build"
+    log_info "Deploy build  ${OK}"
 }
 
 function deploy_apache() {
+    log_info "Deploy apache"
     cp "./apache/${APACHE_CONF}" ${APACHE_AVAILABLE}
     ln -s "${APACHE_AVAILABLE}"  "${APACHE_ENABLED}"
     SETTINGS_OK=$(/usr/sbin/apache2ctl configtest);
@@ -88,6 +99,7 @@ function deploy_apache() {
     fi
     # Reload the apache server
     /bin/systemctl reload apache2.service
+    log_info "Deploy apache ${OK}"
 }
 
 # Services settings
@@ -124,14 +136,17 @@ function main {
             ;;
         esac
     done
-    
+
     if [[ "${SERVICE}" = "_ALL_"  ]]; then
         deploy_apache
     else
         case ${SERVICE} in
+            "folders")
+                deploy_folders
+            ;;
             "apache")
                 deploy_apache
-                ;;
+            ;;
             "build")
                 deploy_build
             ;;
