@@ -1,6 +1,6 @@
 export namespace AppSettings {
     const DEBUG = false;
-    let api_base = 'https://loisirs-live.tourcoing.fr';
+    let api_base = 'https://loisirs-live-api.tourcoing.fr';
 
     if (DEBUG) {
         api_base = 'http://127.0.0.1:8080';
