@@ -1,0 +1,38 @@
+image: node:9.11-stretch
+
+stages:
+  - build
+
+before_script:
+  # Install GIT client
+  - apt-get update -yy
+  - apt-get install -yy git wget unzip
+
+sonar_scan:
+  stage: build
+  variables:
+    DEBUG_SONAR: 0
+    SONAR_VERSION: "3.2.0.1227-linux"
+    SONAR_SCANNER_OPTS: "-Xmx512m"
+    SONAR_HOST: "http://sonarqube.ville.tg/"
+
+
+  script:
+  # Installs sonar-runner ZIP file
+  - if [[ ! -d sonar-scanner-${SONAR_VERSION} ]]; then
+  -     wget --no-verbose https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
+  -     unzip -q sonar-scanner-cli-${SONAR_VERSION}.zip
+  - fi
+  - test $DEBUG_SONAR -eq 1 && sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner --version
+
+  # Runs the sonar-runner
+  - export SONAR_SCANNER_OPTS=${SONAR_SCANNER_OPTS}
+  - export SONAR_USER_HOME=.
+  - sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner -Dsonar.host.url=${SONAR_HOST}
+
+  tags:
+  - node
+  cache:
+    paths:
+    - sonar-scanner-${SONAR_VERSION}/
+    - .scannerwork/
