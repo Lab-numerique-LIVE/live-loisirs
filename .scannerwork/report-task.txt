@@ -1,0 +1,6 @@
+projectKey=org.codehaus.sonar:loisirs-live
+serverUrl=https://sonarqube.ville.tg
+serverVersion=6.7.4.38452
+dashboardUrl=https://sonarqube.ville.tg/dashboard/index/org.codehaus.sonar:loisirs-live
+ceTaskId=AWST7a8aKTduMSzjgY0K
+ceTaskUrl=https://sonarqube.ville.tg/api/ce/task?id=AWST7a8aKTduMSzjgY0K
